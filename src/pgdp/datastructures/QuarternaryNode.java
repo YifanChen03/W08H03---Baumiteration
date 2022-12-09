@@ -20,14 +20,14 @@ public class QuarternaryNode<T extends Comparable<T>> {
 	}
 
 	public T getValue(int i) {
-		if (i < 0 || i > nodeSize) {
+		if (i < 0 || i >= nodeSize) {
 			return null;
 		}
 		return values.get(i);
 	}
 
 	public QuarternaryNode<T> getChild(int i) {
-		if (i < 0 || i > nodeSize + 1) {
+		if (i < 0 || i >= nodeSize + 1) {
 			return null;
 		}
 		return children.get(i);
