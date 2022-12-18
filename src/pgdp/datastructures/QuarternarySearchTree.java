@@ -79,6 +79,7 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		}
 		@Override
 		public boolean hasNext() {
+			//solange counter nicht am Ende der Liste angelangt ist
 			if (counter < out_list.size())
 				return true;
 			return false;
@@ -93,43 +94,51 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 	}
 
 	public ArrayList<?> calculate_out_list() {
-		int round = 0;
-		QuarternaryNode<T> current_node = root;
-		QuarternaryNode<T> current_parent_node = root;
-		QuarternaryNode<T> current_child_node;
-		ArrayList<T> out_list = new ArrayList<>();
+		//current_nodes sind aktuelle nodes einer ebene, current_nodes_new sind die der nächsten Ebene
+		ArrayList<QuarternaryNode> current_nodes = new ArrayList();
+		ArrayList<QuarternaryNode> current_nodes_new = new ArrayList();
+		ArrayList out_list = new ArrayList();
+		QuarternaryNode current_node;
 
-		//falls root == null
-		if (root != null) {
-			current_child_node = root.getChild(0);
-			if (current_child_node == null) {
-				for (int i = 0; i < 3; i++) {
-					out_list.add(current_node.getValue(i));
-				}
-			}
-			//Alle Werte aus dem Baum auslesen und in out_list füllen
-			while (current_child_node != null) {
-				//solange Eltern noch Kinder mit Werten haben haben
-				for (int i = 0; i < Math.pow(4, round); i++) {
-					//4 hoch round mal ausführen
-					if (round == 0) {
+		current_nodes.add(root);
 
-					} else {
-						current_node = current_parent_node.getChild(i);
+		if (root == null) {
+			return out_list;
+		} else {
+			while (current_nodes != null) {
+				for (int i = 0; i < current_nodes.size(); i++) {
+					//Für jeden node aus current_nodes ausführen
+				//for (Iterator<QuarternaryNode> node_it = current_nodes.iterator(); node_it.hasNext();) {
+					current_node = current_nodes.get(i);
+
+					//Werte von aktuellem node zu liste hinzufügen
+					for (Object wert : current_node.getValues()) {
+					//for (Iterator<T> t_it = current_node.getValues().iterator(); t_it.hasNext();) {
+						//falls wert existiert
+						if (wert != null)
+							out_list.add(wert);
 					}
-					for (int i2 = 0; i2 < 3; i2++) {
-						out_list.add(current_node.getValue(i2));
+
+					//jedes Kind des aktuellen nodes in neuen current_nodes legen
+					for (Object kind : current_node.getChildren()) {
+					//for (Iterator<QuarternaryNode> qn2_it = current_node.getChildren().iterator(); qn2_it.hasNext(); ) {
+						//falls kind existiert
+						if (kind != null)
+							current_nodes_new.add((QuarternaryNode) kind);
 					}
 				}
-				if (round != 0) {
-					current_parent_node = current_child_node;
-					current_child_node = current_parent_node.getChild(0);
+				//verschiebe eine Ebene nach unten
+				if (current_nodes_new.size() > 0) {
+					current_nodes.clear();
+					current_nodes = current_nodes_new;
+				} else {
+					current_nodes = null;
 				}
-				round++;
 			}
 			//System.out.println(out_list);
+			//unsortierte Liste mit java comparator nach natürlicher Ordnung sortieren
 			Collections.sort(out_list, Comparator.naturalOrder());
-			//System.out.println(out_list.size());
+			//System.out.println(out_list);
 		}
 		return out_list;
 	}
@@ -156,12 +165,12 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		System.out.println(it.next());
 		System.out.println(it.next());
 		System.out.println(it.next());*/
-		//Iterator it = n.iterator();
+		Iterator it = n.iterator();
 		//System.out.println(it.next());
 
 		// uncomment after implementing the iterator for testing the large example
-				for (int i : n) {
-					System.out.print(i + " - ");
-				}
+				//for (int i : n) {
+				//	System.out.print(i + " - ");
+				//}
 	}
 }
