@@ -134,7 +134,7 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 			}
 			//System.out.println(out_list);
 			//unsortierte Liste mit java comparator nach natürlicher Ordnung sortieren
-			Collections.sort(out_list, Comparator.naturalOrder());
+			Collections.sort(out_list);
 			//System.out.println(out_list);
 		}
 		return out_list;
