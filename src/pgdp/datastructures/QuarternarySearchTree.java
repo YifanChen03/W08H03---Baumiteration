@@ -108,12 +108,10 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 			while (current_nodes != null) {
 				for (int i = 0; i < current_nodes.size(); i++) {
 					//Für jeden node aus current_nodes ausführen
-				//for (Iterator<QuarternaryNode> node_it = current_nodes.iterator(); node_it.hasNext();) {
 					current_node = current_nodes.get(i);
 
 					//Werte von aktuellem node zu liste hinzufügen
 					for (Object wert : current_node.getValues()) {
-					//for (Iterator<T> t_it = current_node.getValues().iterator(); t_it.hasNext();) {
 						//falls wert existiert
 						if (wert != null)
 							out_list.add(wert);
@@ -121,7 +119,6 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 
 					//jedes Kind des aktuellen nodes in neuen current_nodes legen
 					for (Object kind : current_node.getChildren()) {
-					//for (Iterator<QuarternaryNode> qn2_it = current_node.getChildren().iterator(); qn2_it.hasNext(); ) {
 						//falls kind existiert
 						if (kind != null)
 							current_nodes_new.add((QuarternaryNode) kind);
