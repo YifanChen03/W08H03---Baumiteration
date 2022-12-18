@@ -102,6 +102,11 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		//falls root == null
 		if (root != null) {
 			current_child_node = root.getChild(0);
+			if (current_child_node == null) {
+				for (int i = 0; i < 3; i++) {
+					out_list.add(current_node.getValue(i));
+				}
+			}
 			//Alle Werte aus dem Baum auslesen und in out_list füllen
 			while (current_child_node != null) {
 				//solange Eltern noch Kinder mit Werten haben haben
