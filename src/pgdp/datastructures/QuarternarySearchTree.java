@@ -130,6 +130,7 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 	}
 
 	public static void main(String[] args) {
+		//int[] values = new int[] { 8, 4, 12, 1, 5, 9, 13, 3, 7, 11, 15, 2, 6, 10, 14 };
 		int[] values = new int[] { 8, 4, 12, 1, 5, 9, 13, 3, 7, 11, 15, 2, 6, 10, 14 };
 
 		//int[] values = new int[] {};
@@ -152,7 +153,6 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		System.out.println(it.next());*/
 		//Iterator it = n.iterator();
 		//System.out.println(it.next());
-
 
 		// uncomment after implementing the iterator for testing the large example
 				for (int i : n) {
