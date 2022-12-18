@@ -1,9 +1,7 @@
 package pgdp.datastructures;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Random;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<T> {
@@ -64,65 +62,83 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		this.root = root;
 	}
 
-	@Override
+	//@Override
 	public Iterator<T> iterator() {
 		// TODO
-		QuarternaryNode<T> current_node = root;
-		QuarternaryNode<T> current_parent_node = root;
-		QuarternaryNode<T> current_child_node = root.getChild(0);
-		ArrayList<T> out_list = new ArrayList<>();
-
-		//fülle out_list mit Werten in sortierter Reihenfolge
-		for (int i = 0; i < root.height(); i++) {
-			//für die Höhe wird auf jeder Ebene einmal ausgeführt
-			for (int i2 = 0; i < (int) Math.pow(4, i); i2++) {
-				//für jeden Knoten wird diese Loop einmal ausgeführt
-				if (current_node == root) {
-					current_node = root.getChild(0);;
-				} else {
-					out_list.add(current_parent_node.getValue(i2 - 1));
-					current_node = current_parent_node.getChild(i2);
-				}
-				if (current_node == null) {
-					break;
-					//System.out.println(out_list);
-				}
-				for (int i3 = 0; i3 < current_node.getNodeSize(); i3++) {
-					//für jeden Wert in diesem Node
-					out_list.add(current_node.getValue(i3));
-				}
-			}
-		}
 		// Throw exception using the following line of code
 		// throw new NoSuchElementException("Trying to call next on an empty QuarternarySearchTreeIterator");
-		return new Iterator<>() {
-			private static int count = 0;
+		return new TreeIterator<>();
+	}
 
-			@Override
-			public boolean hasNext() {
-				if (count < size())
-					return true;
-				return false;
-			}
+	public class TreeIterator<T extends Comparable<T>> implements Iterator<T> {
+		private static int counter;
+		private ArrayList<T> out_list;
+		public TreeIterator(){
+			counter = 0;
+			out_list = (ArrayList<T>) calculate_out_list();
+		}
+		@Override
+		public boolean hasNext() {
+			if (counter < out_list.size())
+				return true;
+			return false;
+		}
 
-			@Override
-			public T next() {
-				if (hasNext())
-					return out_list.get(count++);
-				throw new NoSuchElementException("Trying to call next on an empty QuarternarySearchTreeIterator");
+		@Override
+		public T next() {
+			if (hasNext())
+				return out_list.get(counter++);
+			throw new NoSuchElementException("Trying to call next on an empty QuarternarySearchTreeIterator");
+		}
+	}
+
+	public ArrayList<?> calculate_out_list() {
+		int round = 0;
+		QuarternaryNode<T> current_node = root;
+		QuarternaryNode<T> current_parent_node = root;
+		QuarternaryNode<T> current_child_node;
+		ArrayList<T> out_list = new ArrayList<>();
+
+		//falls root == null
+		if (root != null) {
+			current_child_node = root.getChild(0);
+			//Alle Werte aus dem Baum auslesen und in out_list füllen
+			while (current_child_node != null) {
+				//solange Eltern noch Kinder mit Werten haben haben
+				for (int i = 0; i < Math.pow(4, round); i++) {
+					//4 hoch round mal ausführen
+					if (round == 0) {
+
+					} else {
+						current_node = current_parent_node.getChild(i);
+					}
+					for (int i2 = 0; i2 < 3; i2++) {
+						out_list.add(current_node.getValue(i2));
+					}
+				}
+				if (round != 0) {
+					current_parent_node = current_child_node;
+					current_child_node = current_parent_node.getChild(0);
+				}
+				round++;
 			}
-		};
+			//System.out.println(out_list);
+			Collections.sort(out_list, Comparator.naturalOrder());
+			//System.out.println(out_list.size());
+		}
+		return out_list;
 	}
 
 	public static void main(String[] args) {
-		//int[] values = new int[] { 8, 4, 12, 1, 5, 9, 13, 3, 7, 11, 15, 2, 6, 10, 14 };
-
 		int[] values = new int[] { 8, 4, 12, 1, 5, 9, 13, 3, 7, 11, 15, 2, 6, 10, 14 };
+
+		//int[] values = new int[] {};
 		QuarternarySearchTree<Integer> n = new QuarternarySearchTree<Integer>();
 		for (int i : values) {
 			n.insert(i);
 		}
 		//System.out.println(n.toGraphvizString());
+		//System.out.println(n.toString());
 		/*System.out.println("gesamter Baum: " + n.toString());
 		System.out.println("root: " + n.root);
 		System.out.println("size: " + n.size());
@@ -135,6 +151,8 @@ public class QuarternarySearchTree<T extends Comparable<T>> implements Iterable<
 		System.out.println(it.next());
 		System.out.println(it.next());*/
 		//Iterator it = n.iterator();
+		//System.out.println(it.next());
+
 
 		// uncomment after implementing the iterator for testing the large example
 				for (int i : n) {
